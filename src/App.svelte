@@ -2,10 +2,20 @@
   import AnswerButton from "./AnswerButton.svelte";
   let currentScore = 0;
   let renzokuSeikai = 0;
+  let quizdata = {
+    mondai: "鮪", 
+    seikai: "まぐろ", 
+    taku: ["ひらめ", "かれい", "まぐろ", "ぶり", "くじら"]
+  };
 
-  function answerButtonClicked(){
-    renzokuSeikai += 1;
-    currentScore += renzokuSeikai;
+  function answerButtonClicked(isCorrect){
+    if(isCorrect){
+      renzokuSeikai += 1;
+      currentScore += renzokuSeikai;
+    }
+    else{
+      renzokuSeikai = 0;
+    }
   }
 </script>
 
@@ -21,10 +31,8 @@
   
   <!-- 選択肢 -->
   <div class="bg-blue-200 flex flex-col justify-around flex-grow items-center">
-    <AnswerButton on:click={answerButtonClicked}>ひらめ</AnswerButton>
-    <AnswerButton on:click={answerButtonClicked}>かれい</AnswerButton>
-    <AnswerButton on:click={answerButtonClicked}>まぐろ</AnswerButton>
-    <AnswerButton on:click={answerButtonClicked}>ぶり</AnswerButton>
-    <AnswerButton on:click={answerButtonClicked}>くじら</AnswerButton>
+    {#each quizdata.taku as t}
+      <AnswerButton on:click={() => answerButtonClicked(quizdata.seikai===t)}>{t}</AnswerButton>
+    {/each}
   </div>
 </main>
