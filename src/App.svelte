@@ -1,12 +1,9 @@
 <script>
   import AnswerButton from "./AnswerButton.svelte";
+  import {getQuizdata} from "./quizdataFactory";
   let currentScore = 0;
   let renzokuSeikai = 0;
-  let quizdata = {
-    mondai: "鮪", 
-    seikai: "まぐろ", 
-    taku: ["ひらめ", "かれい", "まぐろ", "ぶり", "くじら"]
-  };
+  let quizdata = getQuizdata();
 
   function answerButtonClicked(isCorrect){
     if(isCorrect){
@@ -16,6 +13,7 @@
     else{
       renzokuSeikai = 0;
     }
+    quizdata = getQuizdata(); // 問題を差し替える
   }
 </script>
 
@@ -27,7 +25,7 @@
   </div>
   
   <!-- 問題 -->
-  <div class="bg-green-200 text-center text-4xl py-4">鮪</div>
+  <div class="bg-green-200 text-center text-4xl py-4">{quizdata.mondai}</div>
   
   <!-- 選択肢 -->
   <div class="bg-blue-200 flex flex-col justify-around flex-grow items-center">
