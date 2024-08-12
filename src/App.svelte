@@ -1,8 +1,19 @@
+<script>
+  import AnswerButton from "./AnswerButton.svelte";
+  let currentScore = 0;
+  let renzokuSeikai = 0;
+
+  function answerButtonClicked(){
+    renzokuSeikai += 1;
+    currentScore += renzokuSeikai;
+  }
+</script>
+
 <main class="flex flex-col h-svh">
   <!-- メニューバー -->
   <div class="bg-red-200 flex justify-around text-xl font-bold p-3">
-      <div>スコア:0</div>
-      <div>連続正解数:0</div>
+    <div>スコア:{currentScore}</div>
+    <div>連続正解数:{renzokuSeikai}</div>
   </div>
   
   <!-- 問題 -->
@@ -10,8 +21,10 @@
   
   <!-- 選択肢 -->
   <div class="bg-blue-200 flex flex-col justify-around flex-grow items-center">
-    <button class="bg-blue-500 text-blue-100 border-blue-800 text-lg font-bold border-2 rounded-xl py-4 w-4/5">まぐろ</button>
-    <button class="bg-blue-500 text-blue-100 border-blue-800 text-lg font-bold border-2 rounded-xl py-4 w-4/5">ぶり</button>
-    <button class="bg-blue-500 text-blue-100 border-blue-800 text-lg font-bold border-2 rounded-xl py-4 w-4/5">くじら</button>
+    <AnswerButton on:click={answerButtonClicked}>ひらめ</AnswerButton>
+    <AnswerButton on:click={answerButtonClicked}>かれい</AnswerButton>
+    <AnswerButton on:click={answerButtonClicked}>まぐろ</AnswerButton>
+    <AnswerButton on:click={answerButtonClicked}>ぶり</AnswerButton>
+    <AnswerButton on:click={answerButtonClicked}>くじら</AnswerButton>
   </div>
 </main>
