@@ -13,7 +13,7 @@
   const [InitialState, TitleState, QuestionState, AnswerState, GameoverState, QuizStart] = [0, 1, 2, 3, 4, 5];
   let state = InitialState;
 
-  const maxTime = 10;
+  const maxTime = 180;
   let time = 60;
   let quizdata;
   
@@ -51,7 +51,9 @@
         clearInterval(timer);
         changeToGameover();
       }
-      time -= 0.1;
+      if(state===QuestionState){
+        time -= 0.1;
+      }
     }, 100);
     changeToQuestion();
   }
@@ -59,14 +61,25 @@
   function answerButtonClicked(isCorrect){
     if(state!==QuestionState) return;
     fancyScore.updateScore(isCorrect);
+    if(fancyScore.getRenzokuSeikai()>=5){
+      time = Math.min(time+1, maxTime);
+    }
+    else if(!isCorrect){
+      time -= 1;
+    }
     changeToAnswer();
   }
 </script>
 
-{#if state===TitleState}
-  <TitlePage on:click={changeToQuizstart}></TitlePage>
-{:else if state===QuestionState || state===AnswerState || state===GameoverState}
-  <main class="flex flex-col h-svh">
+<svelte:head>
+  <title>QuizApp</title>
+</svelte:head>
+
+<main class="flex flex-col h-svh bg-[url('/src/assets/fish.jpg')] bg-[size:100%] bg-repeat">
+  {#if state===TitleState}
+    <TitlePage on:click={changeToQuizstart}></TitlePage>
+  {:else if state===QuestionState || state===AnswerState || state===GameoverState}
+
     <!-- メニューバー -->
     <FancyScore bind:this={fancyScore}/>
 
@@ -74,10 +87,10 @@
     <Progressbar {maxTime} {time}/>
     
     <!-- 問題 -->
-    <div class="bg-green-200 text-center text-4xl py-4">{quizdata.mondai}</div>
+    <div class="bg-white/60 text-center font-extrabold text-4xl py-4">{quizdata.mondai}</div>
     
     <!-- 選択肢 -->
-    <div class="bg-blue-200 flex flex-col justify-around flex-grow items-center">
+    <div class="bg-white/30 flex flex-col justify-around flex-grow items-center">
       {#each quizdata.taku as t}
         <AnswerButton
           isGrayout = {state===AnswerState && quizdata.seikai!==t}
@@ -85,7 +98,6 @@
         </AnswerButton>
       {/each}
     </div>
-  </main>
-{/if}
-
+  {/if}
+</main>
 <GameoverModal bind:this={gameoverModal} on:click={changeToTitle}/>
