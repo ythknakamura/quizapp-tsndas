@@ -12,16 +12,15 @@
   
   const [InitialState, TitleState, QuestionState, AnswerState, GameoverState, QuizStart] = [0, 1, 2, 3, 4, 5];
   let state = InitialState;
-  let currentScore = 0;
-  let renzokuSeikai = 0;
-  const maxTime = 5;
+
+  const maxTime = 10;
   let time = 60;
   let quizdata;
   
   onMount(changeToTitle);
 
   function changeToTitle(){
-    gameoverModal.close();
+    gameoverModal.closeModal();
     state = TitleState;
   }
 
@@ -41,7 +40,7 @@
 
   function changeToGameover(){
     state = GameoverState;
-    gameoverModal.showModal();
+    gameoverModal.showModal(fancyScore.getScore());
   }
 
   function changeToQuizstart(){
@@ -89,4 +88,4 @@
   </main>
 {/if}
 
-<GameoverModal currentScore={fancyScore?.getScore()} bind:modal={gameoverModal} on:click={changeToTitle}/>
+<GameoverModal bind:this={gameoverModal} on:click={changeToTitle}/>
