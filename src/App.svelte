@@ -5,15 +5,17 @@
   import TitlePage from "./TitlePage.svelte";
   import Progressbar from './Progressbar.svelte';
   import GameoverModal from './GameoverModal.svelte';
+  import FancyScore from './FancyScore.svelte';
   
   let gameoverModal;
+  let fancyScore;
+  
   const [InitialState, TitleState, QuestionState, AnswerState, GameoverState, QuizStart] = [0, 1, 2, 3, 4, 5];
   let state = InitialState;
-  
-  const maxTime = 1;
-  let time = 60;
   let currentScore = 0;
   let renzokuSeikai = 0;
+  const maxTime = 5;
+  let time = 60;
   let quizdata;
   
   onMount(changeToTitle);
@@ -45,8 +47,6 @@
   function changeToQuizstart(){
     state = QuizStart;
     time = maxTime;
-    currentScore = 0;
-    renzokuSeikai = 0;
     const timer = setInterval(()=>{
       if(state===QuestionState && time<0){
         clearInterval(timer);
@@ -59,14 +59,7 @@
 
   function answerButtonClicked(isCorrect){
     if(state!==QuestionState) return;
-
-    if(isCorrect){
-      renzokuSeikai += 1;
-      currentScore += renzokuSeikai;
-    }
-    else{
-      renzokuSeikai = 0;
-    }
+    fancyScore.updateScore(isCorrect);
     changeToAnswer();
   }
 </script>
@@ -76,10 +69,7 @@
 {:else if state===QuestionState || state===AnswerState || state===GameoverState}
   <main class="flex flex-col h-svh">
     <!-- メニューバー -->
-    <div class="bg-red-200 flex justify-around text-xl font-bold p-3">
-      <div>スコア:{currentScore}</div>
-      <div>連続正解数:{renzokuSeikai}</div>
-    </div>
+    <FancyScore bind:this={fancyScore}/>
 
     <!--プログレスバー-->
     <Progressbar {maxTime} {time}/>
@@ -99,4 +89,4 @@
   </main>
 {/if}
 
-<GameoverModal {currentScore} bind:modal={gameoverModal} on:click={changeToTitle}/>
+<GameoverModal currentScore={fancyScore?.getScore()} bind:modal={gameoverModal} on:click={changeToTitle}/>
