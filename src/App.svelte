@@ -1,6 +1,6 @@
 <script>
   import {onMount} from 'svelte';
-  import {getQuizdata} from "./quizdataFactory";
+  import {getQuizdataAsync} from "./quizdataFactory";
   import AnswerButton from "./AnswerButton.svelte";
   import TitlePage from "./TitlePage.svelte";
   import Progressbar from './Progressbar.svelte';
@@ -13,8 +13,8 @@
   const [InitialState, TitleState, QuestionState, AnswerState, GameoverState, QuizStart] = [0, 1, 2, 3, 4, 5];
   let state = InitialState;
 
-  const maxTime = 180;
-  let time = 60;
+  const maxTime = 60;
+  let time = maxTime;
   let quizdata;
   
   onMount(changeToTitle);
@@ -24,8 +24,8 @@
     state = TitleState;
   }
 
-  function changeToQuestion(){
-    quizdata = getQuizdata();
+  async function changeToQuestionAsync(){
+    quizdata = await getQuizdataAsync();
     state = QuestionState;
   }
 
@@ -33,7 +33,7 @@
     state = AnswerState;
     setTimeout(()=>{
       if(state===AnswerState){
-        changeToQuestion();
+        changeToQuestionAsync();
       }
     }, 1000);
   }
@@ -55,7 +55,7 @@
         time -= 0.1;
       }
     }, 100);
-    changeToQuestion();
+    changeToQuestionAsync();
   }
 
   function answerButtonClicked(isCorrect){
@@ -100,4 +100,5 @@
     </div>
   {/if}
 </main>
+
 <GameoverModal bind:this={gameoverModal} on:click={changeToTitle}/>

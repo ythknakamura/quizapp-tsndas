@@ -1,3 +1,8 @@
+import {fetchKanjiYomiAsync, fetchMondaisuAsync} from './supabase.js';
+
+const mondaisu = await fetchMondaisuAsync();
+const numberOfTaku = 5;
+
 /** 0以上max未満の整数をランダムに選ぶ関数 */
 function randomRange(max){
     return Math.floor(Math.random() * max);
@@ -15,27 +20,13 @@ function randomArray(max, len){
     return array;
 }
 
-const QAlist = [
-    {Q: "鮪", A: "まぐろ"},
-    {Q: "鰈", A: "かれい"},
-    {Q: "鯛", A: "たい"},
-    {Q: "鰹", A: "かつお"},
-    {Q: "鯖", A: "さば"},
-    {Q: "鱈", A: "たら"},
-    {Q: "鮭", A: "さけ"},
-    {Q: "鯵", A: "あじ"},
-    {Q: "鮎", A: "あゆ"}
-];
-
-/** ランダムにquizdataを生成 */
-export function getQuizdata(){
-    const numberOfTaku = 5;
-    const takuID = randomArray(QAlist.length, numberOfTaku); 
-    const seikaiID = takuID[randomRange(numberOfTaku)];
-    const taku = takuID.map(id => QAlist[id].A);
+export async function getQuizdataAsync(){
+    const takuID = randomArray(mondaisu, numberOfTaku); 
+    const kanjiYomi = await fetchKanjiYomiAsync(takuID);
+    const seikai = randomRange(numberOfTaku);
     return {
-        mondai: QAlist[seikaiID].Q, 
-        seikai: QAlist[seikaiID].A, 
-        taku: taku
+        mondai: kanjiYomi[seikai].kanji, 
+        seikai: kanjiYomi[seikai].yomi, 
+        taku: kanjiYomi.map(({yomi}) => yomi)
     };
 }
