@@ -13,7 +13,7 @@
   const [InitialState, TitleState, QuestionState, AnswerState, GameoverState, QuizStart] = [0, 1, 2, 3, 4, 5];
   let state = InitialState;
 
-  const maxTime = 6;
+  const maxTime = 60;
   let time = maxTime;
   let quizdata;
   

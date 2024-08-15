@@ -1,7 +1,6 @@
 import {fetchKanjiYomiAsync, fetchMondaisuAsync} from './supabase.js';
 
-const mondaisu = await fetchMondaisuAsync();
-const numberOfTaku = 5;
+let mondaisu;
 
 /** 0以上max未満の整数をランダムに選ぶ関数 */
 function randomRange(max){
@@ -21,6 +20,8 @@ function randomArray(max, len){
 }
 
 export async function getQuizdataAsync(){
+    mondaisu ??= await fetchMondaisuAsync();
+    const numberOfTaku = 5;
     const takuID = randomArray(mondaisu, numberOfTaku); 
     const kanjiYomi = await fetchKanjiYomiAsync(takuID);
     const seikai = randomRange(numberOfTaku);
