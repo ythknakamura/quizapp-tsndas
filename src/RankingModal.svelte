@@ -1,5 +1,6 @@
 <script>
-    import {fetchRankingAsync} from './supabase.js';
+    //import {fetchRankingAsync} from './upabase.js';
+    import {fetchRankingAsync} from './firebase.js';
     let modal;
     let rankingPromise;
     export function showModal(){

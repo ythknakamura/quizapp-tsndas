@@ -1,4 +1,5 @@
-import {fetchKanjiYomiAsync, fetchMondaisuAsync} from './supabase.js';
+//import {fetchKanjiYomiAsync, fetchMondaisuAsync} from './supabase.js';
+import {fetchKanjiYomiAsync, fetchMondaisuAsync} from './firebase.js';
 
 let mondaisu;
 

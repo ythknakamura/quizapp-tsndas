@@ -1,6 +1,7 @@
 <script>
     import {createEventDispatcher } from 'svelte';
-    import {insertScoreAsync} from './supabase.js';
+    //import {insertScoreAsync} from './supabase.js';
+    import {insertScoreAsync} from './firebase.js';
     const dispatch = createEventDispatcher();
     let modal;
     let score;
